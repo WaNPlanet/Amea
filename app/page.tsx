@@ -72,10 +72,8 @@ function Countdown() {
 }
 
 function Wishes() {
-  const [list, setList] = useState<{ name: string; msg: string }[]>([]);
   const [name, setName] = useState(""); const [msg, setMsg] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  useEffect(() => { try { const s = localStorage.getItem("wishes"); if (s) setList(JSON.parse(s)); } catch {} }, []);
   const add = async () => {
     if (!msg.trim() || status === "sending") return;
     const entry = { name: name.trim() || "A loved one", msg: msg.trim() };
@@ -87,9 +85,7 @@ function Wishes() {
         body: JSON.stringify({ name: entry.name, message: entry.msg, _subject: "💚 A new blessing for the wedding", _template: "box" }),
       });
       if (!r.ok) throw new Error();
-      const next = [entry, ...list];
-      setList(next); setName(""); setMsg(""); setStatus("sent");
-      try { localStorage.setItem("wishes", JSON.stringify(next)); } catch {}
+      setName(""); setMsg(""); setStatus("sent");
     } catch { setStatus("error"); }
   };
   return (
@@ -98,11 +94,8 @@ function Wishes() {
         <input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
         <textarea rows={3} placeholder="Write a blessing, a prayer, a wish…" value={msg} onChange={(e) => setMsg(e.target.value)} />
         <button onClick={add} disabled={status === "sending"}>{status === "sending" ? "Sending…" : "Send love 💚"}</button>
-        {status === "sent" && <p className="status">Thank you! Your blessing was delivered 💚</p>}
+        {status === "sent" && <p className="status">Thank you! Your blessing was sent privately 💚</p>}
         {status === "error" && <p className="status err">Couldn’t send, please check your connection and try again.</p>}
-      </div>
-      <div className="wishes">
-        {list.map((w, i) => (<blockquote key={i}>“{w.msg}”<cite>— {w.name}</cite></blockquote>))}
       </div>
     </div>
   );
@@ -136,7 +129,7 @@ export default function Page() {
 
       <section className="wish">
         <h2 className="script">Leave a Blessing</h2>
-        <p className="sub">Words of love and support for the couple</p>
+        <p className="sub">Sent privately, straight to the couple</p>
         <div ref={c.ref} className={c.cls}><Wishes /></div>
       </section>
 
