@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /* ✏️ EDIT THESE ✏️ */
-const BRIDE = "Emmauel";
+const BRIDE = "Emmanuel";
 const GROOM = "Peace";
 const WHEN = new Date("2026-11-23T09:00:00"); // ceremony start
 const DATE_TEXT = "Monday, 23rd November 2026";
